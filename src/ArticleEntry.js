@@ -17,18 +17,23 @@ export default function ArticleEntry({ addArticle }) {
 
   return (
     <div>
-      <form onSubmit={submit}>
-        {error && <p className="error">{error}</p>}
-        Title
-        <input value={title} onChange={(e) => setTitle(e.target.value)} />
-        Body
-        <textarea
-          rows="8"
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-        ></textarea>
-        <button type="submit">Create</button>
-      </form>
+      {" "}
+      <p className="entry">
+        <form onSubmit={submit}>
+          {error && <p className="error">{error}</p>}
+          Title
+          <input value={title} onChange={(e) => setTitle(e.target.value)} />
+          Body
+          <textarea
+            rows="8"
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+          ></textarea>
+          <button type="submit">
+            <span>Create</span>
+          </button>
+        </form>
+      </p>
     </div>
   );
 }

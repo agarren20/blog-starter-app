@@ -2,13 +2,39 @@ import { useEffect, useState } from "react";
 import Nav from "./Nav";
 import Article from "./Article";
 import ArticleEntry from "./ArticleEntry";
-import { fetchArticles, createArticle } from "./articleService";
+import { fetchArticles, createArticle, deleteArticle } from "./articleService";
+import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "./firebaseConfig";
 import "./App.css";
+
+function SignIn() {
+  return (
+    <button onClick={() => signInWithPopup(auth, new GoogleAuthProvider())}>
+      <span>Sign In</span>
+    </button>
+  );
+}
+
+function SignOut() {
+  {
+    if (auth.currentUser) console.log(auth.currentUser.uid);
+  }
+  return (
+    <div>
+      <span className="helloUser">Hello, {auth.currentUser.displayName} </span>
+      <button onClick={() => signOut(auth)}>
+        <span>Sign Out</span>
+      </button>
+    </div>
+  );
+}
 
 export default function App() {
   const [articles, setArticles] = useState([]);
   const [article, setArticle] = useState(null);
   const [writing, setWriting] = useState(null);
+  const [user] = useAuthState(auth);
 
   // This is a trivial app, so just fetch all the articles once, when
   // the app is loaded. A real app would do pagination. Note that
@@ -28,16 +54,43 @@ export default function App() {
     });
   }
 
+  function removeArticle() {
+    deleteArticle({ article }).then((artId) => {
+      setArticle(null);
+      const newList = articles.filter((item) => item.id !== artId);
+      setArticles(newList);
+      setWriting(false);
+    });
+  }
+
   return (
     <div className="App">
       <header>
-        Blog <button onClick={() => setWriting(true)}>New Article</button>
+        <div className="inner-cutout">
+          <h1 className="knockout">Color Guide</h1>{" "}
+        </div>
+        {!user ? <SignIn /> : <SignOut />}
       </header>
-      <Nav articles={articles} setArticle={setArticle} />
-      {writing ? (
+
+      {!user ? (
+        ""
+      ) : (
+        <Nav
+          articles={articles}
+          setArticle={setArticle}
+          setWriting={setWriting}
+          user={user}
+        />
+      )}
+
+      {!user ? (
+        <div>
+          <h1 className="log">Sign in to learn about colors!</h1>
+        </div>
+      ) : writing ? (
         <ArticleEntry addArticle={addArticle} />
       ) : (
-        <Article article={article} />
+        <Article article={article} removeArticle={removeArticle} />
       )}
     </div>
   );

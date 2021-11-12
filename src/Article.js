@@ -1,14 +1,29 @@
-export default function Article({ article }) {
+import { useRef } from "react";
+
+export default function Article({ article, removeArticle }) {
   return (
     <article>
       {!article ? (
-        <p>No article selected</p>
+        <p>
+          <h1 className="welcome">
+            Welcome to the blog! Select an article to read!
+          </h1>
+        </p>
       ) : (
-        <section>
-          <h2>{article.title}</h2>
-          <p className="date">{`Posted: ${article.date}`}</p>
-          <p className="body">{article.body}</p>
-        </section>
+        <div>
+          <section>
+            <h2>{article.title}</h2>
+            <p className="date">{`Posted: ${article.date}`}</p>
+            <p className="body">{article.body}</p>
+          </section>
+          <button
+            onClick={() => {
+              removeArticle(article);
+            }}
+          >
+            <span>Delete</span>
+          </button>
+        </div>
       )}
     </article>
   );

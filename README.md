@@ -1,5 +1,10 @@
-# A Blog Starter App
+#A blog app website the details different meaning and fun facts about different colors
+#Author: Anna Garren
+#Technologies:
 
-A little React blog app.
+- HTML
+- CSS
+- JavaScript
+- Firebase
 
-This repo is designed for you to fork and extend with better styles and connecting to a back end.
+#Linking Firestore database to a React Web Application to create a blog application that also uses Firebase Authentication. The app allows the creator to view and create posts after signing in, and allows other viewers to see posts once they sign in.
